@@ -1,0 +1,62 @@
+/* Product Row styles */
+.productRow {
+  /* background-color: #3d53db; */
+  padding: 25px 0px;
+  display: grid;
+  /* Adjust column widths as needed */
+  grid-template-columns: auto 1fr 4fr 4fr 4fr 4fr 1fr 1fr;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: 6vw 6vw 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  font-weight: 500;
+}
+
+/* Picture styles */
+.picture {
+  /* Center the image horizontally */
+  justify-self: center;
+  justify-self: left;
+  /* Center the image vertically */
+  align-self: center;
+}
+
+/* Checkbox styles */
+.checkbox {
+  /* Hide the default checkbox appearance */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid var(--checkbox-bcolor);
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Checkbox when checked */
+.checkbox:checked {
+  background-color: #3d53db;
+  border-color: #3d53db;
+}
+
+/* Styles for screens with 4K resolution (3840x2160) */
+@media (min-width: 2000px) {
+  /* Checkbox styles */
+  .checkbox,
+  .picture {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Styles for screens at and below 768px */
+@media (max-width: 768px) {
+  /* Picture styles */
+  .picture {
+    justify-self: left;
+  }
+
+  /* Product Row styles */
+  .productRow {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}

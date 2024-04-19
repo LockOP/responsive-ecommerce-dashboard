@@ -1,0 +1,160 @@
+/* containerNL styles */
+.containerNL {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  padding: 3vh;
+  /* Variables for New Listing component */
+  --border-radius: 10px;
+  --button-radius: 10px;
+  --input-vert-padding: 15px;
+  --input-horiz-padding: 15px;
+  --label-text: 20px;
+  --placeholder-text: 14px;
+  --button-color: #3d53db;
+  --border-color: #c2c6e8;
+  --text-color: #141522;
+  --option-text-color: #54577a;
+  --button-text-color: #ffffff;
+}
+
+/* closeButton styles */
+.closeButton {
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  left: 20%;
+  top: 4%;
+  cursor: pointer;
+}
+
+/* title styles */
+.title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 2vh;
+}
+
+/* saveButton styles */
+.saveButton {
+  padding: 10px 15px;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  position: absolute;
+  right: 20%;
+  top: 4%;
+}
+
+/* detailTitle styles */
+.detailTitle {
+  font-size: 22px;
+  font-weight: 550;
+}
+
+/* uploadField styles */
+.uploadField {
+  border: 1px dashed var(--border-color);
+  text-align: center;
+}
+
+/* uploadImages styles */
+.uploadImages {
+  /* Remove text & button on input */
+  display: none;
+}
+
+/* row styles */
+.row {
+  display: flex;
+  flex-direction: column;
+  width: 20vw;
+  margin-bottom: 2vh;
+  align-items: left;
+}
+
+/* labelText styles */
+.labelText {
+  margin-bottom: 2vh;
+  font-weight: 500;
+}
+
+/* Input styles */
+.selectField,
+.inputField,
+.uploadField {
+  border-radius: var(--border-radius);
+  font-size: var(--placeholder-text);
+  padding: var(--input-vert-padding) var(--input-horiz-padding);
+}
+
+/* Input styles */
+.selectField,
+.inputField {
+  border: 1px solid var(--border-color);
+}
+
+/* Styles for screens with 4K resolution (3840x2160) */
+@media (min-width: 2000px) {
+  /* containerNL styles */
+  .containerNL {
+    --input-vert-padding: 20px;
+    --input-horiz-padding: 20px;
+    --label-text: 32px;
+    --placeholder-text: 22px;
+    padding: 3vh;
+  }
+
+  /* closeButton styles */
+  .closeButton {
+    font-size: 35px;
+  }
+
+  /* title styles */
+  .title {
+    font-size: 45px;
+  }
+
+  /* saveButton styles */
+  .saveButton {
+    padding: 15px 25px;
+  }
+
+  /* detailTitle styles */
+  .detailTitle {
+    font-size: 28px;
+  }
+}
+
+/* Styles for screens at and below 1024px */
+@media (max-width: 1024px) {
+  /* containerNL styles */
+  .containerNL {
+    --label-text: 18px;
+    --placeholder-text: 12px;
+  }
+
+  /* closeButton styles */
+  .closeButton {
+    font-size: 18px;
+  }
+
+  /* title styles */
+  .title {
+    font-size: 28px;
+  }
+
+  /* detailTitle styles */
+  .detailTitle {
+    font-size: 20px;
+  }
+
+  /* labelText styles */
+  .labelText {
+    margin-bottom: 1vh;
+  }
+}

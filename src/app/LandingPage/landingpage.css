@@ -1,0 +1,23 @@
+  /* At the top of your CSS file */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
+
+@keyframes scroll {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-40%); }
+  }
+@keyframes scrollright {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(40%); }
+  }
+  
+.logos-container {
+    animation: scroll 10s linear infinite;
+  }
+
+.logos-container-2{
+    animation: scrollright 10s linear infinite;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }

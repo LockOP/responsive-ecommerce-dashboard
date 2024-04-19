@@ -1,0 +1,63 @@
+/* selectContainer styles */
+.selectContainer {
+  margin-right: 10px;
+}
+
+/* customSelect styles */
+.customSelect {
+  background: transparent;
+  border: 1px solid #c2c6e8;
+  border-radius: 10px;
+  padding: 10px 30px;
+  font-weight: 400;
+  /* Disable default arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* SVG arrow */
+  background-image: url("../../../../public/expand_more.svg");
+  background-repeat: no-repeat;
+  background-position-x: 95%;
+  background-position-y: 50%;
+}
+
+.customSelect option[disabled] {
+  /* Hide placeholder value in options */
+  display: none;
+}
+
+/* Styles for screens with 4K resolution (3840x2160) */
+@media (min-width: 2000px) {
+  /* selectContainer styles */
+  .selectContainer {
+    margin-right: 20px;
+  }
+
+  /* customSelect styles */
+  .customSelect {
+    padding: 20px 40px;
+  }
+}
+
+/* Styles for screens at and below 1320px */
+@media (max-width: 1320px) {
+  /* customSelect styles */
+  .customSelect {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
+
+/* Styles for screens at and below 1024px */
+@media (max-width: 1024px) {
+  /* selectContainer styles */
+  .selectContainer {
+    margin-right: 0px;
+  }
+
+  /* customSelect styles */
+  .customSelect {
+    padding: 13px 30px;
+    font-size: 14px;
+  }
+}
