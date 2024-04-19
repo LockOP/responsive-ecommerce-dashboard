@@ -61,7 +61,7 @@ export default function SideBar() {
               setSideBarSearch(e.target.value);
             }}
             type="text"
-            className="w-full pl-14 py-4 pr-4 h-full p-4 bg-transparent focus:outline-none"
+            className="placeholder:text-[#54577A] w-full pl-14 py-4 pr-4 h-full p-4 bg-transparent focus:outline-none"
             placeholder="Search"
           />
         </div>
