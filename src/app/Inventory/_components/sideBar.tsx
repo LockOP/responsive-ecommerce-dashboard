@@ -44,12 +44,12 @@ export default function SideBar() {
 
   return (
     <>
-      <div className="flex-grow overflow-auto w-full flex flex-col gap-2">
-        <div className="w-full px-[35.5] pt-[34px] flex justify-center select-none">
+      <div className="flex-grow overflow-auto w-full flex flex-col gap-4">
+        <div className="w-full px-[35.5] pt-4 flex justify-center select-none">
           <img src="/logoOAI.svg" alt="" className="w-auto" />
         </div>
 
-        <div className="my-4 rounded-2xl h-14 w-full flex flex-row justify-center items-center bg-[#F5F5F5] relative select-none">
+        <div className="my-1 rounded-2xl h-12 w-full flex flex-row justify-center items-center bg-[#F5F5F5] relative select-none">
           <img
             src="/searchSB.svg"
             alt=""
@@ -66,7 +66,7 @@ export default function SideBar() {
           />
         </div>
 
-        <button className="my-4 rounded-2xl h-14 w-full flex flex-row justify-center items-center bg-[#DFE6FE] hover:bg-[#d1dcff] select-none">
+        <button className="my-1 rounded-2xl h-12 w-full flex flex-row justify-center items-center bg-[#DFE6FE] hover:bg-[#d1dcff] select-none">
           <img
             src="/add.svg"
             alt=""
@@ -88,7 +88,7 @@ function CommmonButton({ src = "", label = "", onClick = () => {} }) {
   return (
     <button
       onClick={onClick}
-      className="h-14 w-full shrink-0 flex flex-row gap-4 justify-start items-center p-4 bg-transparent hover:bg-[#f0f0f0] rounded-2xl select-none"
+      className="h-10 w-full shrink-0 flex flex-row gap-4 justify-start items-center px-4 bg-transparent hover:bg-[#f0f0f0] rounded-2xl select-none"
     >
       <img src={src} alt="" className="select-none pointer-events-none" />
       <p className="text-[16px] text-[#09090A] select-none pointer-events-none">
