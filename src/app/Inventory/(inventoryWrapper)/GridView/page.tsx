@@ -65,7 +65,7 @@ export default function Page() {
           </button>
         </div>
       </div>
-      <div className="flex-grow overflow-auto w-full bg-[red] flex flex-col">
+      <div className="flex-grow overflow-auto w-full flex flex-col">
         <InventoryTable />
       </div>
     </div>
@@ -124,16 +124,16 @@ function DropDown({
   }, []);
   return (
     <div
+      ref={DropDownRef}
       key={"dd" + label}
       onClick={() => setOpen(!open)}
-      className="shrink-0 rounded-[10px] h-11 flex flex-row items-center bg-[#ffffff] relative select-none border border-[#C2C6E8] box-border group px-4 gap-2 hover:border-[#9ba1d1]"
+      className="shrink-0 rounded-[10px] h-11 flex flex-row items-center bg-[#ffffff] relative select-none border border-[#C2C6E8] box-border group px-4 gap-2 hover:border-[#9ba1d1] cursor-pointer"
     >
       <p className="select-none pointer-events-none text-[14px] font-semibold text-[#54577A]">
         {label}
       </p>
       <img src="/ArrowDown.svg" />
       <div
-        ref={DropDownRef}
         className={`absolute z-[10] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] ${
           open
             ? "opacity-100 pointer-events-auto translate-y-11"
@@ -144,7 +144,6 @@ function DropDown({
           return (
             <button
               onClick={() => {
-                console.log(option);
                 setSelected(option);
               }}
               key={index}

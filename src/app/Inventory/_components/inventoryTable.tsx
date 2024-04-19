@@ -1,13 +1,14 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function InventoryTable() {
   return (
     <>
-      <div className="flex-grow overflow-auto bg-[orange] px-[30px]">
-        <table className="table-auto w-full max-[1024px]:w-[1240px] max-[1024px] text-left select-none ">
-          <thead>
-            <tr className="bg-[#F9FAFB] text-[#5F6980] font-light text-[14px]">
-              <th className="pl-6 font-normal py-4 w-[19%]">
+      <div className="flex-grow overflow-auto mx-[30px] select-none border border-[#DFE1F3] rounded-lg">
+        <table className="table-auto w-full max-[1024px]:w-[1240px] max-[1024px] text-left select-none">
+          <thead className="sticky top-0 bg-[#F9FAFB] z-[10] border-b border-[#DFE1F3]">
+            <tr className="bg-[#F9FAFB] text-[#6B7280] font-light text-[14px]">
+              <th className="pl-6 font-normal py-4 w-14 h-14">
                 <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                   <input
                     type="checkbox"
@@ -16,76 +17,129 @@ export default function InventoryTable() {
                   />
                 </div>
               </th>
-              <th className="font-normal w-[13%]"></th>
-              <th className="font-normal w-[13%]">Item Name</th>
-              <th className="font-normal w-[15%]">Category</th>
-              <th className="font-normal w-[15%]">Platform</th>
-              <th className="font-normal w-[15%]">Stock</th>
-              <th className="font-normal w-[14%]">Price</th>
-              <th className="font-normal w-[14%]">Price</th>
-              <th className="font-normal w-[14%]">Last Sold</th>
-              <th className="font-normal w-[14%]">Status</th>
-              <th className="pr-6 font-normal w-[14%]">Action</th>
+              <th className=""></th>
+              <th className="font-medium w-[16%]">Item Name</th>
+              <th className="font-medium w-[15%]">Category</th>
+              <th className="font-medium w-[15%]">Platform</th>
+              <th className="font-medium w-[12%]">Stock</th>
+              <th className="font-medium w-[12%]">Price</th>
+              <th className="font-medium w-[14%]">Last Sold</th>
+              <th className="font-medium w-[14%]">Status</th>
+              <th className="pr-6 font-medium w-[14%]">Action</th>
             </tr>
           </thead>
-          {/* <tbody>
-            {installedApps.data
-              .filter(
-                (item: any, index: number) =>
-                  index >= (installedApps.page - 1) * installedApps.size &&
-                  index < installedApps.page * installedApps.size
-              )
-              .map((installedApp: any) => (
-                <tr key={installedApp.name} className="hover:bg-[#F9FAFB]">
-                  <td className="pl-6 py-4 ">
-                    <div className="w-max flex flex-row items-center gap-3">
-                      <div className="w-[44px] h-[44px] flex justify-center items-center rounded-[9.43px] shadow-custom">
-                        <img
-                          src={installedApp.iconSrc}
-                          className="w-[25.78px] h-[25.78px]"
-                        />
-                      </div>
-                      <div className="w-max text-[#282828] text-[14] font-semibold">
-                        {installedApp.name}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-[14px] font-normal text-[#5F6980]">
-                    {installedApp.amount}
-                  </td>
-                  <td>
-                    <div
-                      className={`w-max px-[10px] py-[2px] rounded-full text-[12px] font-semibold ${
-                        installedApp.status ||
-                        installedApp.status == "Cancelled"
-                          ? installedApp.status == "Active"
-                            ? "bg-[#DCFFF5] text-[#20C997]"
-                            : installedApp.status == "Pending"
-                            ? "bg-[#FFEAD8] text-[#FD7E14]"
-                            : "bg-[#F2F4F7] text-[#5F6980]"
-                          : "bg-[#F2F4F7] text-[#5F6980]"
-                      }`}
-                    >
-                      {installedApp.status}
-                    </div>
-                  </td>
-                  <td className="text-[14px] font-normal text-[#5F6980]">
-                    {installedApp.userID}
-                  </td>
-                  <td className="text-[14px] font-normal text-[#5F6980]">
-                    {installedApp.joinedOn}
-                  </td>
-                  <td className="text-[14px] font-normal text-[#5F6980] pr-6">
-                    {installedApp.group}
-                  </td>
-                </tr>
-              ))}
-          </tbody> */}
+          <tbody>
+            {dummyData.map((item) => (
+              <tr key={item.id} className="border-b border-[#DFE1F3] bg-[white]">
+                <td className="pl-6 w-14 h-14">
+                  <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="absolute h-5 w-5 accent-[#ffffff]"
+                    />
+                  </div>
+                </td>
+                <td className="">
+                  <div className="w-10 h-10 bg-[#D9D9D9] rounded-md mx-8"></div>
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.itemName}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.category}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.platform}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.stock}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.lastSold}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.date}
+                </td>
+                {/* <td>{item.date}</td> */}
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  {item.status}
+                </td>
+                <td className="text-[#000000] font-semibold text-[12px]">
+                  <DropDown
+                    key={item.itemName}
+                    actions={[
+                      { label: "Edit", onClick: () => {} },
+                      { label: "Delete", onClick: () => {} },
+                    ]}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
-      <div className="bg-[yellow] w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB]"></div>
+      <div className="bg-[yellow] w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0"></div>
     </>
+  );
+}
+
+function DropDown({
+  key,
+  actions,
+}: {
+  key: string;
+  actions: { label: string; onClick: () => void }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const DropDownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      DropDownRef.current &&
+      !DropDownRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  return (
+    <div
+      ref={DropDownRef}
+      key={key}
+      onClick={() => setOpen(!open)}
+      className="flex flex-row items-center relative select-none w-max  box-border group px-4 gap-2 cursor-pointer"
+    >
+      <img src="/more-circle.svg" />
+      <div
+        className={`absolute z-[10] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] translate-x-[-60px] ${
+          open
+            ? "opacity-100 pointer-events-auto translate-y-0"
+            : "opacity-0 pointer-events-none translate-y-[-14px]"
+        }`}
+      >
+        {actions.map((option, index) => {
+          return (
+            <button
+              onClick={() => {
+                option.onClick();
+              }}
+              key={index}
+              className={`w-full text-ellipsis px-4 py-[14px] hover:bg-[#F2F4F7] select-none text-[14px] font-semibold text-[#54577A] rounded-[10px]`}
+            >
+              {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
