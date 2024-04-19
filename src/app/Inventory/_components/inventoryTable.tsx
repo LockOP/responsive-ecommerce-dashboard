@@ -80,7 +80,7 @@ export default function InventoryTable() {
         </table>
       </div>
 
-      <div className="bg-[yellow] w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0"></div>
+      <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px]"></div>
     </>
   );
 }
@@ -115,11 +115,11 @@ function DropDown({
       ref={DropDownRef}
       key={key}
       onClick={() => setOpen(!open)}
-      className="flex flex-row items-center relative select-none w-max  box-border group px-4 gap-2 cursor-pointer"
+      className="flex flex-row items-center relative select-none w-max box-border group px-4 gap-2 cursor-pointer"
     >
       <img src="/more-circle.svg" />
       <div
-        className={`absolute z-[10] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] translate-x-[-60px] ${
+        className={`absolute z-[20] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] translate-x-[-60px] ${
           open
             ? "opacity-100 pointer-events-auto translate-y-0"
             : "opacity-0 pointer-events-none translate-y-[-14px]"

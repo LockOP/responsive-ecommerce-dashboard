@@ -134,7 +134,7 @@ function DropDown({
       </p>
       <img src="/ArrowDown.svg" />
       <div
-        className={`absolute z-[10] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] ${
+        className={`absolute z-[20] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] ${
           open
             ? "opacity-100 pointer-events-auto translate-y-11"
             : "opacity-0 pointer-events-none translate-y-[-14px]"
