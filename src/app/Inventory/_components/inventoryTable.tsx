@@ -127,6 +127,7 @@ export default function InventoryTable() {
               options={[10, 20, 30, 50]}
               selected={rows}
               setSelected={setRows}
+              setCurrentPage={setPage}
             />
           </div>
           <Pagination
@@ -275,11 +276,13 @@ function PaginationDropDown({
   setSelected,
   label,
   options,
+  setCurrentPage,
 }: {
   selected: number;
   setSelected: any;
   label: number;
   options: number[];
+  setCurrentPage: any;
 }) {
   const [open, setOpen] = useState(false);
   const DropDownRef = useRef<HTMLDivElement>(null);
@@ -321,6 +324,7 @@ function PaginationDropDown({
           return (
             <button
               onClick={() => {
+                setCurrentPage(1);
                 setSelected(option);
               }}
               key={index}
