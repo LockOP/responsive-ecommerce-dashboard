@@ -114,8 +114,8 @@ export default function InventoryTable() {
       <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px] justify-between">
         <div className="text-[14px] text-[#374151]">
           Showing {(page - 1) * rows + 1} to{" "}
-          {(page - 1) * rows + rows + 1 < dummyData.length
-            ? (page - 1) * rows + rows + 1
+          {(page - 1) * rows + rows < dummyData.length
+            ? (page - 1) * rows + rows
             : dummyData.length}{" "}
           of {dummyData.length} results
         </div>
