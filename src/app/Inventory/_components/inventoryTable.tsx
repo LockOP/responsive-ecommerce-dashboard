@@ -2,15 +2,29 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export default function InventoryTable() {
+  const [rows, setRows] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+
+  function selectAll() {
+    if (selectedRows.length === dummyData.length) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows([...dummyData.map((item) => item.itemName)]);
+    }
+  }
   return (
     <>
-      <div className="flex-grow overflow-auto mx-[30px] select-none border border-[#DFE1F3] rounded-lg">
+      <div className="flex-grow overflow-auto mx-[30px] select-none border border-[#DFE1F3] rounded-lg bg-[white]">
         <table className="table-auto w-full max-[1024px]:w-[1240px] max-[1024px] text-left select-none">
           <thead className="sticky top-0 bg-[#F9FAFB] z-[10] border-b border-[#DFE1F3]">
             <tr className="bg-[#F9FAFB] text-[#6B7280] font-light text-[14px]">
               <th className="pl-6 font-normal py-4 w-14 h-14">
                 <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                   <input
+                    checked={selectedRows.length === dummyData.length}
+                    onClick={selectAll}
                     type="checkbox"
                     id="checkbox"
                     className="absolute h-5 w-5 accent-[#ffffff]"
@@ -29,61 +43,171 @@ export default function InventoryTable() {
             </tr>
           </thead>
           <tbody>
-            {dummyData.map((item) => (
-              <tr key={item.id} className="border-b border-[#DFE1F3] bg-[white]">
-                <td className="pl-6 w-14 h-14">
-                  <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
-                    <input
-                      type="checkbox"
-                      id="checkbox"
-                      className="absolute h-5 w-5 accent-[#ffffff]"
+            {dummyData
+              .slice((page - 1) * rows, (page - 1) * rows + rows)
+              .map((item) => (
+                <tr
+                  key={item.id}
+                  className="border-b border-[#DFE1F3] bg-[white]"
+                >
+                  <td className="pl-6 w-14 h-14">
+                    <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
+                      <input
+                        checked={selectedRows.includes(item.itemName)}
+                        onClick={() => {
+                          if (selectedRows.includes(item.itemName)) {
+                            setSelectedRows(
+                              selectedRows.filter(
+                                (selectedRow) => selectedRow !== item.itemName
+                              )
+                            );
+                          } else {
+                            setSelectedRows([...selectedRows, item.itemName]);
+                          }
+                        }}
+                        type="checkbox"
+                        id="checkbox"
+                        className="absolute h-5 w-5 accent-[#ffffff]"
+                      />
+                    </div>
+                  </td>
+                  <td className="">
+                    <div className="w-10 h-10 bg-[#D9D9D9] rounded-md mx-8"></div>
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.itemName}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.category}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.platform}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.stock}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.lastSold}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.date}
+                  </td>
+                  {/* <td>{item.date}</td> */}
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    {item.status}
+                  </td>
+                  <td className="text-[#000000] font-semibold text-[12px]">
+                    <DropDown
+                      key={item.itemName}
+                      actions={[
+                        { label: "Edit", onClick: () => {} },
+                        { label: "Delete", onClick: () => {} },
+                      ]}
                     />
-                  </div>
-                </td>
-                <td className="">
-                  <div className="w-10 h-10 bg-[#D9D9D9] rounded-md mx-8"></div>
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.itemName}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.category}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.platform}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.stock}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.lastSold}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.date}
-                </td>
-                {/* <td>{item.date}</td> */}
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  {item.status}
-                </td>
-                <td className="text-[#000000] font-semibold text-[12px]">
-                  <DropDown
-                    key={item.itemName}
-                    actions={[
-                      { label: "Edit", onClick: () => {} },
-                      { label: "Delete", onClick: () => {} },
-                    ]}
-                  />
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
 
-      <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px]"></div>
+      <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px] justify-between">
+        <div className="text-[14px] text-[#374151]">
+          Showing {(page - 1) * rows + 1} to {(page - 1) * rows + rows + 1} of{" "}
+          {dummyData.length} results
+        </div>
+        <div className="flex flex-row justify-between gap-5 items-center">
+          <div className="flex flex-row items-center gap-2">
+            <p className="text-[14px] text-[#374151]">View</p>
+            <PaginationDropDown
+              label={rows}
+              options={[10, 20, 30, 50]}
+              selected={rows}
+              setSelected={setRows}
+            />
+          </div>
+          <Pagination
+            currentPage={page}
+            setCurrentPage={setPage}
+            totalRows={dummyData.length}
+            rowsPerPage={rows}
+          />
+        </div>
+      </div>
     </>
   );
 }
+
+const Pagination = ({
+  totalRows,
+  rowsPerPage,
+  currentPage,
+  setCurrentPage,
+}: {
+  totalRows: number;
+  rowsPerPage: number;
+  currentPage: number;
+  setCurrentPage: any;
+}) => {
+  // const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    if (
+      i === currentPage ||
+      i === 1 ||
+      i === totalPages ||
+      i === currentPage - 1 ||
+      i === currentPage + 1
+    ) {
+      pageNumbers.push(i);
+    } else if (i === currentPage - 2 || i === currentPage + 2) {
+      pageNumbers.push("...");
+    }
+  }
+
+  return (
+    <div className="flex flex-row gap-2 h-max">
+      <button
+        className="h-max text-[14px] font-bold text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 disabled:text-[#d1d1d1] border-transparent hover:bg-[#e0e5ff] disabled:hover:bg-transparent"
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage(currentPage - 1)}
+      >
+        {"<"}
+      </button>
+      {pageNumbers.map((number, index) =>
+        number === "..." ? (
+          <span
+            className="h-max text-[14px] font-medium text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 border-transparent"
+            key={index}
+          >
+            ...
+          </span>
+        ) : (
+          <button
+            className={`${
+              number === currentPage
+                ? "text-[#546FFF] border-[#546FFF]"
+                : "text-[#6B7280 border-transparent"
+            } h-max text-[14px] font-medium ] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 hover:bg-[#e0e5ff]`}
+            key={index}
+            onClick={() => setCurrentPage(number)}
+          >
+            {number}
+          </button>
+        )
+      )}
+      <button
+        className="h-max text-[14px] font-bold text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 disabled:text-[#d1d1d1] border-transparent hover:bg-[#e0e5ff] disabled:hover:bg-transparent"
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage(currentPage + 1)}
+      >
+        {">"}
+      </button>
+    </div>
+  );
+};
 
 function DropDown({
   key,
@@ -135,6 +259,73 @@ function DropDown({
               className={`w-full text-ellipsis px-4 py-[14px] hover:bg-[#F2F4F7] select-none text-[14px] font-semibold text-[#54577A] rounded-[10px]`}
             >
               {option.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PaginationDropDown({
+  selected,
+  setSelected,
+  label,
+  options,
+}: {
+  selected: number;
+  setSelected: any;
+  label: number;
+  options: number[];
+}) {
+  const [open, setOpen] = useState(false);
+  const DropDownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      DropDownRef.current &&
+      !DropDownRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  return (
+    <div
+      ref={DropDownRef}
+      key={"dd" + label}
+      onClick={() => setOpen(!open)}
+      className="shrink-0 rounded-[10px] h-[43px] flex flex-row items-center bg-[#ffffff] relative select-none border border-[#C2C6E8] box-border group px-4 gap-2 hover:border-[#9ba1d1] cursor-pointer"
+    >
+      <p className="select-none pointer-events-none text-[14px] font-semibold text-[#54577A]">
+        {label}
+      </p>
+      <img src="/ArrowDown.svg" className="rotate-180" />
+      <div
+        className={`absolute z-[20] w-[100px] block box-border bottom-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] ${
+          open
+            ? "opacity-100 pointer-events-auto translate-y-[-43px]"
+            : "opacity-0 pointer-events-none translate-y-0"
+        }`}
+      >
+        {options.map((option, index) => {
+          return (
+            <button
+              onClick={() => {
+                setSelected(option);
+              }}
+              key={index}
+              className={`w-full text-ellipsis px-4 py-[10px] hover:bg-[#F2F4F7] select-none text-[14px] font-semibold text-[#54577A] rounded-[10px] ${
+                selected === option ? "bg-[#F2F4F7]" : ""
+              }`}
+            >
+              {option}
             </button>
           );
         })}

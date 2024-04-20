@@ -66,7 +66,7 @@ export default function SideBar() {
           />
         </div>
 
-        <button className="my-1 rounded-2xl h-12 w-full flex flex-row justify-center items-center bg-[#DFE6FE] hover:bg-[#d1dcff] select-none">
+        <button className="my-1 rounded-2xl h-12 w-full flex flex-row justify-center items-center bg-[#DFE6FE] hover:bg-[#d1dcff] select-none gap-4">
           <img
             src="/add.svg"
             alt=""
