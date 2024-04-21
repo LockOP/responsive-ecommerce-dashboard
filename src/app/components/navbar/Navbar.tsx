@@ -9,18 +9,18 @@ const Navbar = () => {
   const lastScrollTop = useRef(0); // Keep track of the last scroll position
 
   useEffect(() => {
-    gsap.set(navbarRef.current, { autoAlpha: 1 }); // Set initial opacity
+    // gsap.set(navbarRef.current, { autoAlpha: 1 }); // Set initial opacity
 
     const handleScroll = () => {
-      const scrollDown = window.scrollY > lastScrollTop.current; // Check scroll direction
-      if (scrollDown && window.scrollY > 100) {
-        // Scroll down - hide navbar
-        gsap.to(navbarRef.current, { y: -100, autoAlpha: 0 });
-      } else {
-        // Scroll up - show navbar
-        gsap.to(navbarRef.current, { y: 0, autoAlpha: 1 });
-      }
-      lastScrollTop.current = window.scrollY <= 0 ? 0 : window.scrollY; // Update last scroll position
+      // const scrollDown = window.scrollY > lastScrollTop.current; // Check scroll direction
+      // if (scrollDown && window.scrollY > 100) {
+      //   // Scroll down - hide navbar
+      //   gsap.to(navbarRef.current, { y: -100, autoAlpha: 0 });
+      // } else {
+      //   // Scroll up - show navbar
+      //   gsap.to(navbarRef.current, { y: 0, autoAlpha: 1 });
+      // }
+      // lastScrollTop.current = window.scrollY <= 0 ? 0 : window.scrollY; // Update last scroll position
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -32,7 +32,7 @@ const Navbar = () => {
   }, []);
   return (
     <nav
-    ref={navbarRef}
+    // ref={navbarRef}
     className="w-full h-[100px] bg-slate-50 fixed top-0 z-50"
     style={{ top: 0 }} // Ensure the navbar starts at the top
     >
