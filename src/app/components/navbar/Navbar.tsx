@@ -1,4 +1,5 @@
 // Import required modules
+"use client";
 import React, { useEffect, useRef } from 'react';
 import NextLink from 'next/link';
 import { gsap } from 'gsap';
