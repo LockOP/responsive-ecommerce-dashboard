@@ -23,6 +23,7 @@ export default function InventoryTable() {
               <th className="pl-6 font-normal py-4 w-14 h-14">
                 <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                   <input
+                    readOnly
                     checked={selectedRows.length === dummyData.length}
                     onClick={selectAll}
                     type="checkbox"
@@ -53,6 +54,7 @@ export default function InventoryTable() {
                   <td className="pl-6 w-14 h-14">
                     <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                       <input
+                        readOnly
                         checked={selectedRows.includes(item.itemName)}
                         onClick={() => {
                           if (selectedRows.includes(item.itemName)) {
@@ -98,7 +100,7 @@ export default function InventoryTable() {
                   </td>
                   <td className="text-[#000000] font-semibold text-[12px]">
                     <DropDown
-                      key={item.itemName}
+                      key1={item.itemName}
                       actions={[
                         { label: "Edit", onClick: () => {} },
                         { label: "Delete", onClick: () => {} },
@@ -214,10 +216,10 @@ const Pagination = ({
 };
 
 function DropDown({
-  key,
+  key1,
   actions,
 }: {
-  key: string;
+  key1: string;
   actions: { label: string; onClick: () => void }[];
 }) {
   const [open, setOpen] = useState(false);
@@ -241,7 +243,7 @@ function DropDown({
   return (
     <div
       ref={DropDownRef}
-      key={key}
+      key={key1}
       onClick={() => setOpen(!open)}
       className="flex flex-row items-center relative select-none w-max box-border group px-4 gap-2 cursor-pointer"
     >
