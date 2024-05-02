@@ -1,17 +1,29 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
+import { RiExpandUpDownLine } from "react-icons/ri";
+import { RxCaretSort } from "react-icons/rx";
 
-export default function InventoryTable() {
+export default function InventoryTable({
+  data,
+  selectedRows,
+  setSelectedRows,
+}: {
+  data: any[];
+  selectedRows: number[];
+  setSelectedRows: React.Dispatch<React.SetStateAction<number[]>>;
+}) {
+  // const [data, setdata] = useState([...dData]);
   const [rows, setRows] = useState(10);
   const [page, setPage] = useState(1);
 
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [sortType, setSortType] = useState<"asc" | "desc" | null>(null);
+  const [sortColumn, setSortColumn] = useState<string>("");
 
   function selectAll() {
-    if (selectedRows.length === dummyData.length) {
+    if (selectedRows.length === data.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows([...dummyData.map((item) => item.itemName)]);
+      setSelectedRows([...data.map((item) => item.orderId)]);
     }
   }
   return (
@@ -20,11 +32,11 @@ export default function InventoryTable() {
         <table className="table-auto w-full max-[1024px]:w-[1240px] max-[1024px] text-left select-none">
           <thead className="sticky top-0 bg-[#F9FAFB] z-[10] border-b border-[#DFE1F3]">
             <tr className="bg-[#F9FAFB] text-[#6B7280] font-light text-[14px]">
-              <th className="pl-6 font-normal py-4 w-14 h-14">
+              <th className="pl-6 font-normal py-4 w-14 h-14 border-r border-[#DFE1F3] ">
                 <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                   <input
                     readOnly
-                    checked={selectedRows.length === dummyData.length}
+                    checked={selectedRows.length === data.length}
                     onClick={selectAll}
                     type="checkbox"
                     id="checkbox"
@@ -32,39 +44,121 @@ export default function InventoryTable() {
                   />
                 </div>
               </th>
-              <th className=""></th>
-              <th className="font-medium w-[16%]">Item Name</th>
-              <th className="font-medium w-[15%]">Category</th>
-              <th className="font-medium w-[15%]">Platform</th>
-              <th className="font-medium w-[12%]">Stock</th>
-              <th className="font-medium w-[12%]">Price</th>
-              <th className="font-medium w-[14%]">Last Sold</th>
-              <th className="font-medium w-[14%]">Status</th>
-              <th className="pr-6 font-medium w-[14%]">Action</th>
+              {/* <th className=""></th> */}
+              <th className="font-medium w-[10%] border-r border-[#DFE1F3] pl-5">
+                <span className="flex flex-row gap-2 items-center">
+                  Order Id
+                  <button
+                    onClick={() => {
+                      setSortType(
+                        sortType === null
+                          ? "asc"
+                          : sortType == "asc"
+                          ? "desc"
+                          : null
+                      );
+                      setSortColumn("orderId");
+                    }}
+                    className="group"
+                  >
+                    <RiExpandUpDownLine className="text-[16px] text-[#8E92BC] group-hover:text-[#333] ani" />
+                  </button>
+                </span>
+              </th>
+              <th className="font-medium w-[12%] border-r border-[#DFE1F3] pl-5">
+                Order Date
+              </th>
+              <th className="font-medium w-[15%] border-r border-[#DFE1F3] pl-5">
+                Customer
+              </th>
+              <th className="font-medium w-[12%] border-r border-[#DFE1F3] pl-5">
+                Platform
+              </th>
+              <th className="font-medium w-[7%] border-r border-[#DFE1F3] pl-5">
+                <span className="flex flex-row gap-2 items-center">
+                  Qty
+                  <button
+                    onClick={() => {
+                      setSortType(
+                        sortType === null
+                          ? "asc"
+                          : sortType == "asc"
+                          ? "desc"
+                          : null
+                      );
+                      setSortColumn("quantity");
+                    }}
+                    className="group"
+                  >
+                    <RiExpandUpDownLine className="text-[16px] text-[#8E92BC] group-hover:text-[#333] ani" />
+                  </button>
+                </span>
+              </th>
+              <th className="font-medium w-[7%] border-r border-[#DFE1F3] pl-5">
+                <span className="flex flex-row gap-2 items-center">
+                  Value
+                  <button
+                    onClick={() => {
+                      setSortType(
+                        sortType === null
+                          ? "asc"
+                          : sortType == "asc"
+                          ? "desc"
+                          : null
+                      );
+                      setSortColumn("value");
+                    }}
+                    className="group"
+                  >
+                    <RiExpandUpDownLine className="text-[16px] text-[#8E92BC] group-hover:text-[#333] ani" />
+                  </button>
+                </span>
+              </th>
+              <th className="font-medium w-[20%] border-r border-[#DFE1F3] pl-5">
+                Tracking Number
+              </th>
+              <th className="font-medium w-[14%] border-r border-[#DFE1F3] pl-5">
+                Order Status
+              </th>
+              <th className="pr-6 font-medium w-[14%] border-r border-[#DFE1F3] pl-5">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
-            {dummyData
+            {(sortType === null
+              ? data
+              : [...data].sort((a: any, b: any) => {
+                  switch (sortType) {
+                    case "asc":
+                      return a[sortColumn] < b[sortColumn] ? -1 : 1;
+                    case "desc":
+                      return a[sortColumn] > b[sortColumn] ? -1 : 1;
+                    default:
+                      return 0;
+                  }
+                })
+            )
               .slice((page - 1) * rows, (page - 1) * rows + rows)
               .map((item) => (
                 <tr
-                  key={item.id}
+                  key={item.orderId}
                   className="border-b border-[#DFE1F3] bg-[white]"
                 >
-                  <td className="pl-6 w-14 h-14">
+                  <td className="px-6 w-14 h-14">
                     <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
                       <input
                         readOnly
-                        checked={selectedRows.includes(item.itemName)}
+                        checked={selectedRows.includes(item.orderId)}
                         onClick={() => {
-                          if (selectedRows.includes(item.itemName)) {
+                          if (selectedRows.includes(item.orderId)) {
                             setSelectedRows(
                               selectedRows.filter(
-                                (selectedRow) => selectedRow !== item.itemName
+                                (selectedRow) => selectedRow !== item.orderId
                               )
                             );
                           } else {
-                            setSelectedRows([...selectedRows, item.itemName]);
+                            setSelectedRows([...selectedRows, item.orderId]);
                           }
                         }}
                         type="checkbox"
@@ -73,34 +167,46 @@ export default function InventoryTable() {
                       />
                     </div>
                   </td>
-                  <td className="">
+                  {/* <td className="">
                     <div className="w-10 h-10 bg-[#D9D9D9] rounded-md mx-8"></div>
+                  </td> */}
+                  <td className="text-[#6B7280] text-[14px] pl-5">
+                    {item.orderId}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.itemName}
+                  <td className="text-[#6B7280] text-[14px] pl-5">
+                    {item.orderDate}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.category}
+                  <td className="text-[#6B7280] text-[14px] pl-5">
+                    {item.customer}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
+                  <td className="text-[#6B7280] text-[14px] pl-5">
                     {item.platform}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.stock}
+                  <td className="text-[#6B7280] text-[14px] pl-5">
+                    {item.quantity}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.lastSold}
-                  </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.date}
+                  <td className="text-[#6B7280] text-[14px] pl-5">
+                    {item.value}
                   </td>
                   {/* <td>{item.date}</td> */}
-                  <td className="text-[#000000] font-semibold text-[12px]">
-                    {item.status}
+                  <td className="text-[#111827] font-medium text-[14px] pl-5">
+                    {item.trackingNumber}
                   </td>
-                  <td className="text-[#000000] font-semibold text-[12px]">
+                  <td className="pl-5">
+                    <div
+                      className={`text-[14px] leading-[21px] h-auto px-[9px] py-[2px] w-max rounded-full ${getStatusColor(
+                        item.orderStatus
+                      )}`}
+                    >
+                      {item.orderStatus}
+                    </div>
+                  </td>
+                  {/* <td className="text-[#000000] font-semibold text-[12px]">
+                    
+                  </td> */}
+                  <td className="text-[#6B7280] text-[14px]">
                     <DropDown
-                      key1={item.itemName}
+                      key1={item.orderId}
                       actions={[
                         { label: "Edit", onClick: () => {} },
                         { label: "Delete", onClick: () => {} },
@@ -116,10 +222,10 @@ export default function InventoryTable() {
       <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px] justify-between">
         <div className="text-[14px] text-[#374151]">
           Showing {(page - 1) * rows + 1} to{" "}
-          {(page - 1) * rows + rows < dummyData.length
+          {(page - 1) * rows + rows < data.length
             ? (page - 1) * rows + rows
-            : dummyData.length}{" "}
-          of {dummyData.length} results
+            : data.length}{" "}
+          of {data.length} results
         </div>
         <div className="flex flex-row justify-between gap-5 items-center">
           <div className="flex flex-row items-center gap-2">
@@ -135,7 +241,7 @@ export default function InventoryTable() {
           <Pagination
             currentPage={page}
             setCurrentPage={setPage}
-            totalRows={dummyData.length}
+            totalRows={data.length}
             rowsPerPage={rows}
           />
         </div>
@@ -219,7 +325,7 @@ function DropDown({
   key1,
   actions,
 }: {
-  key1: string;
+  key1: number;
   actions: { label: string; onClick: () => void }[];
 }) {
   const [open, setOpen] = useState(false);
@@ -343,335 +449,37 @@ function PaginationDropDown({
   );
 }
 
-const dummyData = [
-  {
-    id: 1,
-    itemName: "Item1",
-    category: "Category1",
-    platform: "Platform1",
-    stock: 10,
-    price: 15.23,
-    lastSold: "$20.00",
-    date: "2022-01-01",
-    status: "Active",
-  },
-  {
-    id: 2,
-    itemName: "Item2",
-    category: "Category2",
-    platform: "Platform2",
-    stock: 15,
-    price: 23.45,
-    lastSold: "$25.00",
-    date: "2022-02-01",
-    status: "Inactive",
-  },
-  {
-    id: 3,
-    itemName: "Item3",
-    category: "Category3",
-    platform: "Platform3",
-    stock: 20,
-    price: 32.67,
-    lastSold: "$30.00",
-    date: "2022-03-01",
-    status: "Active",
-  },
-  {
-    id: 4,
-    itemName: "Item4",
-    category: "Category4",
-    platform: "Platform4",
-    stock: 5,
-    price: 40.89,
-    lastSold: "$35.00",
-    date: "2022-04-01",
-    status: "Inactive",
-  },
-  {
-    id: 5,
-    itemName: "Item5",
-    category: "Category5",
-    platform: "Platform5",
-    stock: 30,
-    price: 55.12,
-    lastSold: "$40.00",
-    date: "2022-05-01",
-    status: "Active",
-  },
-  {
-    id: 6,
-    itemName: "Item6",
-    category: "Category6",
-    platform: "Platform6",
-    stock: 25,
-    price: 65.34,
-    lastSold: "$45.00",
-    date: "2022-06-01",
-    status: "Inactive",
-  },
-  {
-    id: 7,
-    itemName: "Item7",
-    category: "Category7",
-    platform: "Platform7",
-    stock: 8,
-    price: 73.56,
-    lastSold: "$50.00",
-    date: "2022-07-01",
-    status: "Active",
-  },
-  {
-    id: 8,
-    itemName: "Item8",
-    category: "Category8",
-    platform: "Platform8",
-    stock: 12,
-    price: 85.78,
-    lastSold: "$55.00",
-    date: "2022-08-01",
-    status: "Inactive",
-  },
-  {
-    id: 9,
-    itemName: "Item9",
-    category: "Category9",
-    platform: "Platform9",
-    stock: 18,
-    price: 91.01,
-    lastSold: "$60.00",
-    date: "2022-09-01",
-    status: "Active",
-  },
-  {
-    id: 10,
-    itemName: "Item10",
-    category: "Category10",
-    platform: "Platform10",
-    stock: 22,
-    price: 104.23,
-    lastSold: "$65.00",
-    date: "2022-10-01",
-    status: "Inactive",
-  },
-  {
-    id: 11,
-    itemName: "Item11",
-    category: "Category11",
-    platform: "Platform11",
-    stock: 7,
-    price: 112.45,
-    lastSold: "$70.00",
-    date: "2022-11-01",
-    status: "Active",
-  },
-  {
-    id: 12,
-    itemName: "Item12",
-    category: "Category12",
-    platform: "Platform12",
-    stock: 11,
-    price: 120.67,
-    lastSold: "$75.00",
-    date: "2022-12-01",
-    status: "Inactive",
-  },
-  {
-    id: 13,
-    itemName: "Item13",
-    category: "Category13",
-    platform: "Platform13",
-    stock: 28,
-    price: 135.89,
-    lastSold: "$80.00",
-    date: "2022-13-01",
-    status: "Active",
-  },
-  {
-    id: 14,
-    itemName: "Item14",
-    category: "Category14",
-    platform: "Platform14",
-    stock: 17,
-    price: 143.12,
-    lastSold: "$85.00",
-    date: "2022-14-01",
-    status: "Inactive",
-  },
-  {
-    id: 15,
-    itemName: "Item15",
-    category: "Category15",
-    platform: "Platform15",
-    stock: 33,
-    price: 155.34,
-    lastSold: "$90.00",
-    date: "2022-15-01",
-    status: "Active",
-  },
-  {
-    id: 16,
-    itemName: "Item16",
-    category: "Category16",
-    platform: "Platform16",
-    stock: 27,
-    price: 160.56,
-    lastSold: "$95.00",
-    date: "2022-16-01",
-    status: "Inactive",
-  },
-  {
-    id: 17,
-    itemName: "Item17",
-    category: "Category17",
-    platform: "Platform17",
-    stock: 9,
-    price: 175.78,
-    lastSold: "$100.00",
-    date: "2022-17-01",
-    status: "Active",
-  },
-  {
-    id: 18,
-    itemName: "Item18",
-    category: "Category18",
-    platform: "Platform18",
-    stock: 14,
-    price: 180.01,
-    lastSold: "$105.00",
-    date: "2022-18-01",
-    status: "Inactive",
-  },
-  {
-    id: 19,
-    itemName: "Item19",
-    category: "Category19",
-    platform: "Platform19",
-    stock: 21,
-    price: 195.23,
-    lastSold: "$110.00",
-    date: "2022-19-01",
-    status: "Active",
-  },
-  {
-    id: 20,
-    itemName: "Item20",
-    category: "Category20",
-    platform: "Platform20",
-    stock: 24,
-    price: 200.45,
-    lastSold: "$115.00",
-    date: "2022-20-01",
-    status: "Inactive",
-  },
-  {
-    id: 21,
-    itemName: "Item21",
-    category: "Category21",
-    platform: "Platform21",
-    stock: 6,
-    price: 215.67,
-    lastSold: "$120.00",
-    date: "2022-21-01",
-    status: "Active",
-  },
-  {
-    id: 22,
-    itemName: "Item22",
-    category: "Category22",
-    platform: "Platform22",
-    stock: 19,
-    price: 220.89,
-    lastSold: "$125.00",
-    date: "2022-22-01",
-    status: "Inactive",
-  },
-  {
-    id: 23,
-    itemName: "Item23",
-    category: "Category23",
-    platform: "Platform23",
-    stock: 26,
-    price: 235.12,
-    lastSold: "$130.00",
-    date: "2022-23-01",
-    status: "Active",
-  },
-  {
-    id: 24,
-    itemName: "Item24",
-    category: "Category24",
-    platform: "Platform24",
-    stock: 16,
-    price: 240.34,
-    lastSold: "$135.00",
-    date: "2022-24-01",
-    status: "Inactive",
-  },
-  {
-    id: 25,
-    itemName: "Item25",
-    category: "Category25",
-    platform: "Platform25",
-    stock: 32,
-    price: 255.56,
-    lastSold: "$140.00",
-    date: "2022-25-01",
-    status: "Active",
-  },
-  {
-    id: 26,
-    itemName: "Item26",
-    category: "Category26",
-    platform: "Platform26",
-    stock: 29,
-    price: 260.78,
-    lastSold: "$145.00",
-    date: "2022-26-01",
-    status: "Inactive",
-  },
-  {
-    id: 27,
-    itemName: "Item27",
-    category: "Category27",
-    platform: "Platform27",
-    stock: 4,
-    price: 275.01,
-    lastSold: "$150.00",
-    date: "2022-27-01",
-    status: "Active",
-  },
-  {
-    id: 28,
-    itemName: "Item28",
-    category: "Category28",
-    platform: "Platform28",
-    stock: 13,
-    price: 280.23,
-    lastSold: "$155.00",
-    date: "2022-28-01",
-    status: "Inactive",
-  },
-  {
-    id: 29,
-    itemName: "Item29",
-    category: "Category29",
-    platform: "Platform29",
-    stock: 23,
-    price: 295.45,
-    lastSold: "$160.00",
-    date: "2022-29-01",
-    status: "Active",
-  },
-  {
-    id: 30,
-    itemName: "Item30",
-    category: "Category30",
-    platform: "Platform30",
-    stock: 18,
-    price: 300.67,
-    lastSold: "$165.00",
-    date: "2022-30-01",
-    status: "Inactive",
-  },
-];
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "overdue":
+      return "bg-[#DB2719] text-[#FFFFFF]";
+    case "shipped":
+      return "bg-[#E8FAA6] text-[#4C7A0B] ";
+    case "flagged":
+      return "bg-[#FFEFB0] text-[#7A4D0B] ";
+    case "delivered":
+      return "bg-[#659711] text-[#FFFFFF]";
+    case "due today":
+      return "bg-[#FFC8A6] text-[#7A0619]";
+    case "active":
+      return "bg-[#dfdfff] text-[blue]";
+    default:
+      return "bg-gray-400";
+  }
+};
+
+// const data = [];
+
+// for (let i = 1; i <= 30; i++) {
+//   const order = {
+//     orderId: i,
+//     orderDate: "2022-01-01",
+//     customer: `Customer${i}`,
+//     platform: `Platform${i}`,
+//     quantity: Math.floor(Math.random() * 20) + 1, // Random quantity between 1 and 20
+//     value: (Math.random() * 100).toFixed(2), // Random value between 0 and 100 with 2 decimal places
+//     trackingNumber: Math.floor(Math.random() * 1000000000).toString(), // Random 9-digit tracking number
+//     orderStatus: "Active",
+//   };
+//   data.push(order);
+// }
