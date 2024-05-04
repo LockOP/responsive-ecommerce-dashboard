@@ -325,21 +325,27 @@ function DropDownSlider({
             : "opacity-0 pointer-events-none translate-y-[-14px]"
         }`}
       >
-        <div className="w-full flex flex-col gap-8 cursor-default px-[14px] pt-[15.5px] pb-[7.5px]">
+        <div className="w-full flex flex-col gap-6 cursor-default px-[14px] pt-[15.5px] pb-[7.5px]">
           <div className="flex flex-col w-full gap-[9px]">
             <div className="w-full flex flex-row justify-between items-center text-[black]">
               <p>${value[0]}</p>
               <p>${value[1]}</p>
             </div>
-            <Slider
-              style={{}}
-              min={0}
-              max={1000}
-              getAriaLabel={() => "Range"}
-              value={value}
-              onChange={handleChange}
-              valueLabelDisplay="auto"
-            />
+            <div className="w-full px-2">
+              <Slider
+                classes={{
+                  thumb: "w-4 h-4 bg-[white] border-4 border-[#3D53DB]",
+                  track: "bg-[#C2C6E8] h-2 border-none boder-[#DFE6FE]",
+                  rail: "bg-[#C2C6E8] h-2 border-none",
+                }}
+                min={0}
+                max={1000}
+                getAriaLabel={() => "Range"}
+                value={value}
+                onChange={handleChange}
+                valueLabelDisplay="auto"
+              />
+            </div>
           </div>
 
           <div className="w-full flex flex-row justify-between">
