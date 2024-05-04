@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import InventoryTable from "../../_components/inventoryTable";
 import { dummyData } from "../../_components/dummyData";
+import Slider from "@mui/material/Slider";
+
+// import Typography from '@mui/material/Typography';
+// import Slider from '@mui/material/Slider';
 
 export default function Page() {
   const [search, setSearch] = useState("");
@@ -29,11 +33,6 @@ export default function Page() {
               selectedRows.length ? "" : "hidden"
             }`}
           >
-            {/* <img
-              src="/arrow-down-circle.svg"
-              alt=""
-              className="select-none pointer-events-none"
-            /> */}
             <p className="text-[16px] font-semibold select-none pointer-events-none text-[#54577A]">
               Delete
             </p>
@@ -46,11 +45,6 @@ export default function Page() {
               selectedRows.length ? "" : "hidden"
             }`}
           >
-            {/* <img
-              src="/arrow-down-circle.svg"
-              alt=""
-              className="select-none pointer-events-none"
-            /> */}
             <p className="text-[16px] font-semibold select-none pointer-events-none text-[#54577A]">
               Message Buyers
             </p>
@@ -60,12 +54,33 @@ export default function Page() {
             setSearch={setSearch}
             hidden={selectedRows.length}
           />
+          <DropDownSlider label="Slider" />
+          <DropDown
+            label="Update Status"
+            options={[
+              "Shipped",
+              "Needs Attention",
+              "Delivered",
+              "Due Today",
+              "Flagged",
+            ]}
+            selected={status}
+            setSelected={setStatus}
+            hidden={!selectedRows.length}
+          />
 
           <DropDown
             label="Status"
-            options={["Available", "Coming Soon", "Not Available"]}
+            options={[
+              "Shipped",
+              "Needs Attention",
+              "Delivered",
+              "Due Today",
+              "Flagged",
+            ]}
             selected={status}
             setSelected={setStatus}
+            hidden={selectedRows.length}
           />
           <DropDown
             label="Order Value Range"
@@ -73,6 +88,23 @@ export default function Page() {
             selected={stores}
             setSelected={setStores}
           />
+          {/* <div style={{ margin: 'auto', display: 'block', width: 'fit-content' }}>
+      <h3>Price Range Selector in ReactJS</h3>
+      <Typography id="range-slider" gutterBottom>
+        Select Price Range:
+      </Typography>
+      <Slider
+        value={value}
+        onChange={handleRangeChange}
+        valueLabelDisplay="auto"
+        min={0}
+        max={100}
+        step={1}
+      />
+      <p>
+        Your selected price range is between ${value[0]} and ${value[1]}
+      </p>
+    </div> */}
           <DropDown
             label="More Filters"
             options={["Filter 1", "Filter 2", "Filter 3", "Filter 4"]}
@@ -161,12 +193,14 @@ function DropDown({
   label,
   options,
   allowClear = true,
+  hidden = false,
 }: {
   selected: string;
   setSelected: any;
   label: string;
   options: string[];
   allowClear?: boolean;
+  hidden?: boolean | number;
 }) {
   const [open, setOpen] = useState(false);
   const DropDownRef = useRef<HTMLDivElement>(null);
@@ -193,7 +227,7 @@ function DropDown({
       onClick={() => setOpen(!open)}
       className={`shrink-0 rounded-[10px] h-11 flex flex-row items-center bg-[#ffffff] relative select-none border box-border group px-4 gap-2 cursor-pointer ${
         open ? "border-[#546FFF]" : "border-[#C2C6E8]"
-      }`}
+      } ${hidden ? "hidden" : ""}`}
     >
       <p className="select-none pointer-events-none text-[12px] font-semibold text-[#54577A]">
         {label}
@@ -230,3 +264,107 @@ function DropDown({
     </div>
   );
 }
+
+function DropDownSlider({
+  selected,
+  setSelected,
+  label,
+  options,
+  allowClear = true,
+  hidden = false,
+}: {
+  selected?: string;
+  setSelected?: any;
+  label: string;
+  options?: string[];
+  allowClear?: boolean;
+  hidden?: boolean | number;
+}) {
+  const [value, setValue] = useState<number[]>([0, 1000]);
+
+  const handleChange = (event: Event, newValue: number | number[]) => {
+    setValue(newValue as number[]);
+  };
+
+  const [open, setOpen] = useState(false);
+  const DropDownRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      DropDownRef.current &&
+      !DropDownRef.current.contains(event.target as Node)
+    ) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  return (
+    <div
+      ref={DropDownRef}
+      key={"dd" + label}
+      onClick={() => setOpen(!open)}
+      className={`shrink-0 rounded-[10px] h-11 flex flex-row items-center bg-[#ffffff] relative select-none border box-border group px-4 gap-2 cursor-pointer ${
+        open ? "border-[#546FFF]" : "border-[#C2C6E8]"
+      } ${hidden ? "hidden" : ""}`}
+    >
+      <p className="select-none pointer-events-none text-[12px] font-semibold text-[#54577A]">
+        {label}
+      </p>
+      <img src="/ArrowDown.svg" />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`absolute z-[20] w-[200px] block box-border top-4 left-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] overflow-hidden flex-col ${
+          open
+            ? "opacity-100 pointer-events-auto translate-y-11"
+            : "opacity-0 pointer-events-none translate-y-[-14px]"
+        }`}
+      >
+        <div className="w-full flex flex-col gap-8 cursor-default px-[14px] pt-[15.5px] pb-[7.5px]">
+          <div className="flex flex-col w-full gap-[9px]">
+            <div className="w-full flex flex-row justify-between items-center text-[black]">
+              <p>${value[0]}</p>
+              <p>${value[1]}</p>
+            </div>
+            <Slider
+              style={{}}
+              min={0}
+              max={1000}
+              getAriaLabel={() => "Range"}
+              value={value}
+              onChange={handleChange}
+              valueLabelDisplay="auto"
+            />
+          </div>
+
+          <div className="w-full flex flex-row justify-between">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              className="w-auto h-[36px] border box-border border-[#C2C6E8] rounded-[10px] px-4 flex flex-row items-center text-[#54577A]"
+            >
+              Clear
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              className="w-auto h-[36px] border box-border border-[#3D53DB] bg-[#3D53DB] rounded-[10px] px-4 flex flex-row items-center text-[#FFF]"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+// src/components/PriceRangeDropdown.js
+
+// npm install @emotion/styled @emotion/react @mui/material
