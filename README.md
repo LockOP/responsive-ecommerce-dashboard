@@ -62,3 +62,5 @@ The link below provides an overview of the project structure of a Next.js applic
 | tsconfig.json      | Configuration file for TypeScript       |
 | tailwind.config.js | Tailwind CSS configuration file         |
 | postcss.config.js  | PostCSS configuration file              |
+
+npm install @emotion/react @emotion/styled @mui/material @mui/x-date-pickers-pro
