@@ -53,7 +53,7 @@ export default function Page() {
             setSearch={setSearch}
             hidden={selectedRows.length}
           />
-          <DropDownSlider label="Slider" />
+          
           <DropDownCalendar label="Calendar" />
           <DropDown
             label="Update Status"
@@ -82,29 +82,7 @@ export default function Page() {
             setSelected={setStatus}
             hidden={selectedRows.length}
           />
-          <DropDown
-            label="Order Value Range"
-            options={["Nearby", "City", "State"]}
-            selected={stores}
-            setSelected={setStores}
-          />
-          {/* <div style={{ margin: 'auto', display: 'block', width: 'fit-content' }}>
-      <h3>Price Range Selector in ReactJS</h3>
-      <Typography id="range-slider" gutterBottom>
-        Select Price Range:
-      </Typography>
-      <Slider
-        value={value}
-        onChange={handleRangeChange}
-        valueLabelDisplay="auto"
-        min={0}
-        max={100}
-        step={1}
-      />
-      <p>
-        Your selected price range is between ${value[0]} and ${value[1]}
-      </p>
-    </div> */}
+          <DropDownSlider label="Order Value Range" />
           <DropDown
             label="More Filters"
             options={["Filter 1", "Filter 2", "Filter 3", "Filter 4"]}
