@@ -541,7 +541,7 @@
 
 .rdrMonthAndYearWrapper {
   align-items: center;
-  height: 60px;
+  height: 84px;
   padding-top: unset;
 }
 
@@ -552,6 +552,8 @@
 .rdrNextPrevButton:hover {
   background: #dfe6fe;
 }
+
+/* #54577A */
 
 .rdrPprevButton i {
   border-color: transparent #54577a transparent transparent;
@@ -586,7 +588,7 @@
 }
 
 .rdrDateDisplayItem input {
-  height: 42px;
+  height: 50px;
   color: #54577a;
   font-size: 16px;
   font-weight: 600;
