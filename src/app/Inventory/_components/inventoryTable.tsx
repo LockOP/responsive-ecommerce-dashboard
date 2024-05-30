@@ -23,17 +23,22 @@ export default function InventoryTable({
     if (selectedRows.length === data.length) {
       setSelectedRows([]);
     } else {
-      setSelectedRows([...data.map((item) => item.orderId)]);
+      setSelectedRows([...data.map((item) => item.id)]);
     }
+  }
+
+  function extractDatePart(dateTimeString: string) {
+    if (!dateTimeString) return "";
+    return new Date(dateTimeString).toISOString().split("T")[0];
   }
   return (
     <>
-      <div className="flex-grow overflow-auto mx-[30px] select-none border border-[#DFE1F3] rounded-lg bg-[white]">
-        <table className="table-auto w-full max-[1024px]:w-[1240px] max-[1024px] text-left select-none">
-          <thead className="sticky top-0 bg-[#F9FAFB] z-[10] border-b border-[#DFE1F3]">
-            <tr className="bg-[#F9FAFB] text-[#6B7280] font-light text-[14px]">
-              <th className="pl-6 font-normal py-4 w-14 h-14 border-r border-[#DFE1F3] ">
-                <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
+      <div className="mx-[30px] flex-grow select-none overflow-auto rounded-lg border border-[#DFE1F3] bg-[white]">
+        <table className="max-[1024px] w-full table-auto select-none text-left max-[1024px]:w-[1240px]">
+          <thead className="sticky top-0 z-[10] border-b border-[#DFE1F3] bg-[#F9FAFB]">
+            <tr className="bg-[#F9FAFB] text-[14px] font-light text-[#6B7280]">
+              <th className="h-14 w-14 border-r border-[#DFE1F3] py-4 pl-6 font-normal ">
+                <div className="relative flex h-5 w-5 items-center justify-center overflow-clip rounded-md border-[2.25px] border-[#C5C6CC]">
                   <input
                     readOnly
                     checked={selectedRows.length === data.length}
@@ -45,8 +50,8 @@ export default function InventoryTable({
                 </div>
               </th>
               {/* <th className=""></th> */}
-              <th className="font-medium w-[10%] border-r border-[#DFE1F3] pl-5">
-                <span className="flex flex-row gap-2 items-center">
+              <th className="w-[10%] border-r border-[#DFE1F3] pl-5 font-medium">
+                <span className="flex flex-row items-center gap-2">
                   Order Id
                   <button
                     onClick={() => {
@@ -54,27 +59,43 @@ export default function InventoryTable({
                         sortType === null
                           ? "asc"
                           : sortType == "asc"
-                          ? "desc"
-                          : null
+                            ? "desc"
+                            : null,
                       );
-                      setSortColumn("orderId");
+                      setSortColumn("id");
                     }}
                     className="group"
                   >
-                    <RiExpandUpDownLine className="text-[16px] text-[#8E92BC] group-hover:text-[#333] ani" />
+                    <RiExpandUpDownLine className="ani text-[16px] text-[#8E92BC] group-hover:text-[#333]" />
                   </button>
                 </span>
               </th>
-              <th className="font-medium w-[12%] border-r border-[#DFE1F3] pl-5">
-                Order Date
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Sales Date
               </th>
-              <th className="font-medium w-[15%] border-r border-[#DFE1F3] pl-5">
-                Customer
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Shipment Date
               </th>
-              <th className="font-medium w-[12%] border-r border-[#DFE1F3] pl-5">
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Product Type
+              </th>
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Brand
+              </th>
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Manufacturer
+              </th>
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
                 Platform
               </th>
-              <th className="font-medium w-[7%] border-r border-[#DFE1F3] pl-5">
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Cost price
+              </th>
+              <th className="w-[12%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Selling Price
+              </th>
+
+              {/* <th className="font-medium w-[7%] border-r border-[#DFE1F3] pl-5">
                 <span className="flex flex-row gap-2 items-center">
                   Qty
                   <button
@@ -113,14 +134,12 @@ export default function InventoryTable({
                     <RiExpandUpDownLine className="text-[16px] text-[#8E92BC] group-hover:text-[#333] ani" />
                   </button>
                 </span>
+              </th> */}
+
+              <th className="w-[14%] border-r border-[#DFE1F3] pl-5 font-medium">
+                Status
               </th>
-              <th className="font-medium w-[20%] border-r border-[#DFE1F3] pl-5">
-                Tracking Number
-              </th>
-              <th className="font-medium w-[14%] border-r border-[#DFE1F3] pl-5">
-                Order Status
-              </th>
-              <th className="pr-6 font-medium w-[14%] border-r border-[#DFE1F3] pl-5">
+              <th className="w-[14%] border-r border-[#DFE1F3] pl-5 pr-6 font-medium">
                 Action
               </th>
             </tr>
@@ -142,23 +161,23 @@ export default function InventoryTable({
               .slice((page - 1) * rows, (page - 1) * rows + rows)
               .map((item) => (
                 <tr
-                  key={item.orderId}
+                  key={item.id}
                   className="border-b border-[#DFE1F3] bg-[white]"
                 >
-                  <td className="px-6 w-14 h-14">
-                    <div className="border-[2.25px] border-[#C5C6CC] rounded-md overflow-clip w-5 h-5 flex justify-center items-center relative">
+                  <td className="h-14 w-14 px-6">
+                    <div className="relative flex h-5 w-5 items-center justify-center overflow-clip rounded-md border-[2.25px] border-[#C5C6CC]">
                       <input
                         readOnly
-                        checked={selectedRows.includes(item.orderId)}
+                        checked={selectedRows.includes(item.id)}
                         onClick={() => {
-                          if (selectedRows.includes(item.orderId)) {
+                          if (selectedRows.includes(item.id)) {
                             setSelectedRows(
                               selectedRows.filter(
-                                (selectedRow) => selectedRow !== item.orderId
-                              )
+                                (selectedRow) => selectedRow !== item.id,
+                              ),
                             );
                           } else {
-                            setSelectedRows([...selectedRows, item.orderId]);
+                            setSelectedRows([...selectedRows, item.id]);
                           }
                         }}
                         type="checkbox"
@@ -170,43 +189,48 @@ export default function InventoryTable({
                   {/* <td className="">
                     <div className="w-10 h-10 bg-[#D9D9D9] rounded-md mx-8"></div>
                   </td> */}
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.orderId}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">{item.id}</td>
+
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {extractDatePart(item.saleDates)}
                   </td>
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.orderDate}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {extractDatePart(item.shipmentDate)}
                   </td>
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.customer}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.productType}
                   </td>
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.platform}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.brand}
                   </td>
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.quantity}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.manufacturer}
                   </td>
-                  <td className="text-[#6B7280] text-[14px] pl-5">
-                    {item.value}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.platforms[0]}
                   </td>
-                  {/* <td>{item.date}</td> */}
-                  <td className="text-[#111827] font-medium text-[14px] pl-5">
-                    {item.trackingNumber}
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.costPrice}
                   </td>
+                  <td className="pl-5 text-[14px] text-[#6B7280]">
+                    {item.salePrice}
+                  </td>
+
                   <td className="pl-5">
                     <div
-                      className={`text-[14px] leading-[21px] h-auto px-[9px] py-[2px] w-max rounded-full ${getStatusColor(
-                        item.orderStatus
+                      className={`h-auto w-max rounded-full px-[9px] py-[2px] text-[14px] leading-[21px] ${getStatusColor(
+                        item.status,
                       )}`}
                     >
-                      {item.orderStatus}
+                      {item.status}
                     </div>
                   </td>
                   {/* <td className="text-[#000000] font-semibold text-[12px]">
                     
                   </td> */}
-                  <td className="text-[#6B7280] text-[14px]">
+                  <td className="text-[14px] text-[#6B7280]">
                     <DropDown
-                      key1={item.orderId}
+                      key1={item.id}
                       actions={[
                         { label: "Edit", onClick: () => {} },
                         { label: "Delete", onClick: () => {} },
@@ -219,15 +243,15 @@ export default function InventoryTable({
         </table>
       </div>
 
-      <div className="select-none w-full px-[30px] h-[67px] flex flex-row border-t items-center border-[#E5E7EB] shrink-0 mt-[25px] justify-between">
+      <div className="mt-[25px] flex h-[67px] w-full shrink-0 select-none flex-row items-center justify-between border-t border-[#E5E7EB] px-[30px]">
         <div className="text-[14px] text-[#374151]">
-          Showing {(page - 1) * rows + 1} to{" "}
+          Showing&nbsp;{(page - 1) * rows + 1}&nbsp;to&nbsp;
           {(page - 1) * rows + rows < data.length
             ? (page - 1) * rows + rows
-            : data.length}{" "}
-          of {data.length} results
+            : data.length}
+          &nbsp;of&nbsp;{data.length}&nbsp;results
         </div>
-        <div className="flex flex-row justify-between gap-5 items-center">
+        <div className="flex flex-row items-center justify-between gap-5">
           <div className="flex flex-row items-center gap-2">
             <p className="text-[14px] text-[#374151]">View</p>
             <PaginationDropDown
@@ -280,9 +304,9 @@ const Pagination = ({
   }
 
   return (
-    <div className="flex flex-row gap-2 h-max">
+    <div className="flex h-max flex-row gap-2">
       <button
-        className="h-max text-[14px] font-bold text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 disabled:text-[#d1d1d1] border-transparent hover:bg-[#e0e5ff] disabled:hover:bg-transparent"
+        className="flex h-max items-center justify-center border-b-2 border-transparent px-[7px] pb-[11px] pt-[7px] text-[14px] font-bold text-[#6B7280] hover:bg-[#e0e5ff] disabled:text-[#d1d1d1] disabled:hover:bg-transparent"
         disabled={currentPage === 1}
         onClick={() => setCurrentPage(currentPage - 1)}
       >
@@ -291,7 +315,7 @@ const Pagination = ({
       {pageNumbers.map((number, index) =>
         number === "..." ? (
           <span
-            className="h-max text-[14px] font-medium text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 border-transparent"
+            className="flex h-max items-center justify-center border-b-2 border-transparent px-[7px] pb-[11px] pt-[7px] text-[14px] font-medium text-[#6B7280]"
             key={index}
           >
             ...
@@ -300,18 +324,18 @@ const Pagination = ({
           <button
             className={`${
               number === currentPage
-                ? "text-[#546FFF] border-[#546FFF]"
+                ? "border-[#546FFF] text-[#546FFF]"
                 : "text-[#6B7280 border-transparent"
-            } h-max text-[14px] font-medium ] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 hover:bg-[#e0e5ff]`}
+            } ] flex h-max items-center justify-center border-b-2 px-[7px] pb-[11px] pt-[7px] text-[14px] font-medium hover:bg-[#e0e5ff]`}
             key={index}
             onClick={() => setCurrentPage(number)}
           >
             {number}
           </button>
-        )
+        ),
       )}
       <button
-        className="h-max text-[14px] font-bold text-[#6B7280] px-[7px] flex justify-center items-center pt-[7px] pb-[11px] border-b-2 disabled:text-[#d1d1d1] border-transparent hover:bg-[#e0e5ff] disabled:hover:bg-transparent"
+        className="flex h-max items-center justify-center border-b-2 border-transparent px-[7px] pb-[11px] pt-[7px] text-[14px] font-bold text-[#6B7280] hover:bg-[#e0e5ff] disabled:text-[#d1d1d1] disabled:hover:bg-transparent"
         disabled={currentPage === totalPages}
         onClick={() => setCurrentPage(currentPage + 1)}
       >
@@ -351,14 +375,14 @@ function DropDown({
       ref={DropDownRef}
       key={key1}
       onClick={() => setOpen(!open)}
-      className="flex flex-row items-center relative select-none w-max box-border group px-4 gap-2 cursor-pointer"
+      className="group relative box-border flex w-max cursor-pointer select-none flex-row items-center gap-2 px-4"
     >
       <img src="/more-circle.svg" />
       <div
-        className={`absolute z-[20] w-[150px] block box-border top-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] translate-x-[-60px] ${
+        className={`ani absolute right-0 top-1 z-[20] box-border block w-[150px] translate-x-[-60px] rounded-[10px] border border-[#C2C6E8] bg-[white] shadow-lg group-hover:border-[#9ba1d1] ${
           open
-            ? "opacity-100 pointer-events-auto translate-y-0"
-            : "opacity-0 pointer-events-none translate-y-[-14px]"
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-[-14px] opacity-0"
         }`}
       >
         {actions.map((option, index) => {
@@ -368,7 +392,7 @@ function DropDown({
                 option.onClick();
               }}
               key={index}
-              className={`w-full text-ellipsis px-4 py-[14px] hover:bg-[#F2F4F7] select-none text-[14px] font-semibold text-[#54577A] rounded-[10px]`}
+              className={`w-full select-none text-ellipsis rounded-[10px] px-4 py-[14px] text-[14px] font-semibold text-[#54577A] hover:bg-[#F2F4F7]`}
             >
               {option.label}
             </button>
@@ -415,17 +439,17 @@ function PaginationDropDown({
       ref={DropDownRef}
       key={"dd" + label}
       onClick={() => setOpen(!open)}
-      className="shrink-0 rounded-[10px] h-[43px] flex flex-row items-center bg-[#ffffff] relative select-none border border-[#C2C6E8] box-border group px-4 gap-2 hover:border-[#9ba1d1] cursor-pointer"
+      className="group relative box-border flex h-[43px] shrink-0 cursor-pointer select-none flex-row items-center gap-2 rounded-[10px] border border-[#C2C6E8] bg-[#ffffff] px-4 hover:border-[#9ba1d1]"
     >
-      <p className="select-none pointer-events-none text-[14px] font-semibold text-[#54577A]">
+      <p className="pointer-events-none select-none text-[14px] font-semibold text-[#54577A]">
         {label}
       </p>
       <img src="/ArrowDown.svg" className="rotate-180" />
       <div
-        className={`absolute z-[20] w-[100px] block box-border bottom-1 right-0 shadow-lg bg-[white] rounded-[10px] ani border border-[#C2C6E8] group-hover:border-[#9ba1d1] ${
+        className={`ani absolute bottom-1 right-0 z-[20] box-border block w-[100px] rounded-[10px] border border-[#C2C6E8] bg-[white] shadow-lg group-hover:border-[#9ba1d1] ${
           open
-            ? "opacity-100 pointer-events-auto translate-y-[-43px]"
-            : "opacity-0 pointer-events-none translate-y-0"
+            ? "pointer-events-auto translate-y-[-43px] opacity-100"
+            : "pointer-events-none translate-y-0 opacity-0"
         }`}
       >
         {options.map((option, index) => {
@@ -436,7 +460,7 @@ function PaginationDropDown({
                 setSelected(option);
               }}
               key={index}
-              className={`w-full text-ellipsis px-4 py-[10px] hover:bg-[#F2F4F7] select-none text-[14px] font-semibold text-[#54577A] rounded-[10px] ${
+              className={`w-full select-none text-ellipsis rounded-[10px] px-4 py-[10px] text-[14px] font-semibold text-[#54577A] hover:bg-[#F2F4F7] ${
                 selected === option ? "bg-[#F2F4F7]" : ""
               }`}
             >
@@ -467,19 +491,3 @@ const getStatusColor = (status: string) => {
       return "bg-gray-400";
   }
 };
-
-// const data = [];
-
-// for (let i = 1; i <= 30; i++) {
-//   const order = {
-//     orderId: i,
-//     orderDate: "2022-01-01",
-//     customer: `Customer${i}`,
-//     platform: `Platform${i}`,
-//     quantity: Math.floor(Math.random() * 20) + 1, // Random quantity between 1 and 20
-//     value: (Math.random() * 100).toFixed(2), // Random value between 0 and 100 with 2 decimal places
-//     trackingNumber: Math.floor(Math.random() * 1000000000).toString(), // Random 9-digit tracking number
-//     orderStatus: "Active",
-//   };
-//   data.push(order);
-// }

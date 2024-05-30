@@ -212,9 +212,6 @@
   right: 2px;
 }
 
-.rdrInRange {
-}
-
 .rdrStartEdge {
   border-top-left-radius: 1.042em;
   border-bottom-left-radius: 1.042em;
@@ -596,4 +593,22 @@
 
 .rdrDateDisplayItemActive {
   border: 1px solid #3d53db;
+}
+
+.rdrCalendarWrapper:not(.rdrDateRangeWrapper)
+  .rdrDayHovered
+  .rdrDayNumber:after {
+    border: unset;
+    border-radius: unset;
+}
+
+.rdrDay:has(.rdrSelected) .rdrDayNumber {
+  background-color: #3d53db;
+}
+
+/* 0e26c7 */
+
+
+.rdrDay:has(.rdrSelected) .rdrDayNumber:hover {
+  background-color: #0e26c7;
 }

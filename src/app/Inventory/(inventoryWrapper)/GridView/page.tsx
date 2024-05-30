@@ -1,9 +1,6 @@
 "use client";
 
-import "react-date-range/dist/styles.css";
-import "./calendar.css";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import InventoryTable from "../../_components/inventoryTable";
 import { dummyData } from "../../_components/dummyData";
@@ -12,8 +9,11 @@ import DropDown from "@/app/components/dropdown/DropDown";
 import DropDownSlider from "@/app/components/dropdown/DropDownSlider";
 import DropDownCalendar from "@/app/components/dropdown/DropDownCalendar";
 import SearchBar from "@/app/components/Searchbar/SearchBar";
+import { get_all_inventory_service } from "@/services/inventoryService";
 
 export default function Page() {
+  const [inventoryList, setInventoryList] = useState([]);
+
   const [search, setSearch] = useState("");
 
   const [status, setStatus] = useState("");
@@ -27,18 +27,31 @@ export default function Page() {
     orderValueRange: { start: 0, end: 1000 },
   });
 
+  async function populate_inventory_list() {
+    try {
+      const res = await get_all_inventory_service();
+      console.log(res);
+      setInventoryList(res);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    populate_inventory_list();
+  }, []);
   return (
-    <div className="flex-grow overflow-auto w-full flex flex-col pt-[25px] gap-[25px] box-border bg-[#FAFAFA]">
-      <div className="flex  px-[30px] flex-row items-center justify-between">
+    <div className="box-border flex w-full flex-grow flex-col gap-[25px] overflow-auto bg-[#FAFAFA] pt-[25px]">
+      <div className="flex  flex-row items-center justify-between px-[30px]">
         <div className="flex flex-row items-center gap-[10px]">
           <button
             key={"r1icsr"}
             onClick={() => {}}
-            className={`px-4 bg-[white] gap-2 flex flex-row h-11 items-center select-none border border-[#C2C6E8] hover:border-[#9ba1d1] rounded-[10px] ${
+            className={`flex h-11 select-none flex-row items-center gap-2 rounded-[10px] border border-[#C2C6E8] bg-[white] px-4 hover:border-[#9ba1d1] ${
               selectedRows.length ? "" : "hidden"
             }`}
           >
-            <p className="text-[16px] font-semibold select-none pointer-events-none text-[#54577A]">
+            <p className="pointer-events-none select-none text-[16px] font-semibold text-[#54577A]">
               Delete
             </p>
           </button>
@@ -46,11 +59,11 @@ export default function Page() {
           <button
             key={"r13csr"}
             onClick={() => {}}
-            className={`px-4 bg-[white] gap-2 flex flex-row h-11 items-center select-none border border-[#C2C6E8] hover:border-[#9ba1d1] rounded-[10px] ${
+            className={`flex h-11 select-none flex-row items-center gap-2 rounded-[10px] border border-[#C2C6E8] bg-[white] px-4 hover:border-[#9ba1d1] ${
               selectedRows.length ? "" : "hidden"
             }`}
           >
-            <p className="text-[16px] font-semibold select-none pointer-events-none text-[#54577A]">
+            <p className="pointer-events-none select-none text-[16px] font-semibold text-[#54577A]">
               Message Buyers
             </p>
           </button>
@@ -100,36 +113,36 @@ export default function Page() {
           <button
             key={"r1icsv"}
             onClick={() => {}}
-            className="px-4 bg-[white] gap-2 flex flex-row h-11 items-center select-none border border-[#C2C6E8] hover:border-[#9ba1d1] rounded-[10px]"
+            className="flex h-11 select-none flex-row items-center gap-2 rounded-[10px] border border-[#C2C6E8] bg-[white] px-4 hover:border-[#9ba1d1]"
           >
             <img
               src="/arrow-down-circle.svg"
               alt=""
-              className="select-none pointer-events-none"
+              className="pointer-events-none select-none"
             />
-            <p className="text-[16px] font-semibold select-none pointer-events-none text-[#54577A]">
+            <p className="pointer-events-none select-none text-[16px] font-semibold text-[#54577A]">
               Export to CSV
             </p>
           </button>
           <button
             key={"r2nl"}
             onClick={() => {}}
-            className="px-4 gap-2 flex flex-row h-11 items-center select-none border border-[#3D53DB] hover:border-[#2135b8] rounded-[10px] bg-[#3D53DB]"
+            className="flex h-11 select-none flex-row items-center gap-2 rounded-[10px] border border-[#3D53DB] bg-[#3D53DB] px-4 hover:border-[#2135b8]"
           >
             <img
               src="/truck-fast.svg"
               alt=""
-              className="select-none pointer-events-none"
+              className="pointer-events-none select-none"
             />
-            <p className="text-[16px] font-semibold select-none pointer-events-none text-[#ffffff]">
+            <p className="pointer-events-none select-none text-[16px] font-semibold text-[#ffffff]">
               Get Shipping Labels
             </p>
           </button>
         </div>
       </div>
-      <div className="flex-grow overflow-auto w-full flex flex-col">
+      <div className="flex w-full flex-grow flex-col overflow-auto">
         <InventoryTable
-          data={dummyData}
+          data={inventoryList}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
         />
